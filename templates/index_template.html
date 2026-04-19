@@ -50,8 +50,8 @@
     <div class="header-inner">
         <a href="index.html" class="logo">₿<span>CryptoDaily</span></a>
         <div class="header-price">
-            <div class="btc-price">{{ price }}</div>
-            <div class="btc-change {{ change_class }}">{{ change }}</div>
+            <div class="btc-price" id="header-price">Loading...</div>
+            <div class="btc-change" id="header-change"></div>
         </div>
     </div>
 </header>
@@ -313,5 +313,6 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=u
     document.getElementById('live-price').textContent = 'BTC: Price unavailable';
   });
 </script>
+<script src="assets/live.js"></script>
 </body>
 </html>

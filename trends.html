@@ -163,10 +163,6 @@ const fmtPrice = (n) => {
 const colorVal = (n) => n >= 0 ? '#4caf50' : '#f44336';
 const arrow    = (n) => n >= 0 ? '▲' : '▼';
 
-// Top bar
-const now = new Date();
-document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-document.getElementById('live-time').textContent = now.toUTCString().slice(17,22) + ' UTC';
 
 let allCoins = [];
 
@@ -183,8 +179,6 @@ async function loadTrends() {
         // Update header price from BTC
         const btc = allCoins[0];
         const btcChange = btc.price_change_percentage_24h?.toFixed(2);
-        document.getElementById('live-price').innerHTML =
-            `BTC: <strong style="color:#f7931a">${fmtPrice(btc.current_price)}</strong> <span style="color:${colorVal(btcChange)}">${arrow(btcChange)} ${Math.abs(btcChange)}%</span>`;
         document.getElementById('header-price').textContent = fmtPrice(btc.current_price);
         document.getElementById('header-change').innerHTML =
             `<span style="color:${colorVal(btcChange)}">${arrow(btcChange)} ${Math.abs(btcChange)}% (24h)</span>`;
@@ -324,6 +318,6 @@ function filterTable() {
 loadTrends();
 setInterval(loadTrends, 60000);
 </script>
-
+<script src="assets/live.js"></script>
 </body>
 </html>

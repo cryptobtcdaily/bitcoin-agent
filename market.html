@@ -256,10 +256,6 @@ const fmtPrice = (n) => n == null ? 'N/A' :
 
 const colorVal = (n) => n >= 0 ? '#4caf50' : '#f44336';
 
-// Top bar live date and time
-const now = new Date();
-document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-document.getElementById('live-time').textContent = now.toUTCString().slice(17,22) + ' UTC';
 
 // Fetch BTC + Global data
 async function loadMarketData() {
@@ -280,7 +276,6 @@ async function loadMarketData() {
 
         // Update top bar AND header from same data
         const priceHTML = `BTC: <strong style="color:#f7931a">${price}</strong> <span style="color:${changeColor}">${arrowStr} ${Math.abs(change)}%</span>`;
-        document.getElementById('live-price').innerHTML  = priceHTML;
         document.getElementById('header-price').textContent = price;
         document.getElementById('header-change').innerHTML =
             `<span style="color:${changeColor}">${arrowStr} ${Math.abs(change)}% (24h)</span>`;
@@ -420,6 +415,6 @@ loadMarketData();
 // Then refresh every 60 seconds automatically
 setInterval(loadMarketData, 60000);
 </script>
-
+<script src="assets/live.js"></script>
 </body>
 </html>

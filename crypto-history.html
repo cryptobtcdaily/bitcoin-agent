@@ -323,21 +323,8 @@ const now = new Date();
 document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
 document.getElementById('live-time').textContent = now.toUTCString().slice(17,22) + ' UTC';
 
-// Live BTC price
-fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true')
-  .then(r => r.json())
-  .then(data => {
-    const price = '$' + data.bitcoin.usd.toLocaleString('en-US');
-    const change = data.bitcoin.usd_24h_change.toFixed(2);
-    const arrow = change >= 0 ? '▲' : '▼';
-    const color = change >= 0 ? '#4caf50' : '#f44336';
-    document.getElementById('live-price').innerHTML =
-      `BTC: <strong style="color:#f7931a">${price}</strong> <span style="color:${color}">${arrow} ${Math.abs(change)}%</span>`;
-  })
-  .catch(() => {
-    document.getElementById('live-price').textContent = 'BTC: Price unavailable';
-  });
-</script>
 
+</script>
+<script src="assets/live.js"></script>
 </body>
 </html>
