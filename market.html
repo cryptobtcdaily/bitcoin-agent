@@ -15,8 +15,7 @@
         .logo { font-size: 2em; font-weight: 800; color: #f7931a; text-decoration: none; }
         .logo span { color: #fff; }
         .header-price .btc-price { font-size: 1.4em; font-weight: 700; color: #f7931a; }
-        .header-price .btc-change { font-size: 0.85em; color: #4caf50; }
-        .header-price .btc-change.down { color: #f44336; }
+        .header-price .btc-change { font-size: 0.85em; }
         nav { background: #0d0d0d; border-bottom: 1px solid #1e1e1e; position: sticky; top: 0; z-index: 100; }
         .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: flex; gap: 4px; }
         nav a { color: #888; text-decoration: none; padding: 14px 18px; font-size: 0.88em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-bottom: 3px solid transparent; transition: all 0.2s; display: inline-block; }
@@ -30,10 +29,11 @@
         .badge-down { background: #2d0d0d; color: #f44336; }
         .card { background: #111; border: 1px solid #1e1e1e; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: border-color 0.2s; }
         .card:hover { border-color: #333; }
-        footer { background: #050505; border-top: 1px solid #1a1a1a; padding: 30px 40px; margin-top: 60px; text-align: center; font-size: 0.78em; color: #333; }
         .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.88em; }
         .stat-label { color: #666; }
         .stat-value { color: #e0e0e0; font-weight: 600; }
+        .loading { color: #555; font-size: 0.85em; text-align: center; padding: 20px; }
+        footer { background: #050505; border-top: 1px solid #1a1a1a; padding: 30px 40px; margin-top: 60px; text-align: center; font-size: 0.78em; color: #333; }
     </style>
 </head>
 <body>
@@ -51,8 +51,8 @@
     <div class="header-inner">
         <a href="index.html" class="logo">₿<span>CryptoDaily</span></a>
         <div class="header-price">
-            <div class="btc-price">$75,601.00</div>
-            <div class="btc-change down">▼ 2.04% (24h)</div>
+            <div class="btc-price" id="header-price">Loading...</div>
+            <div class="btc-change" id="header-change"></div>
         </div>
     </div>
 </header>
@@ -73,33 +73,32 @@
 
 <div class="container">
 
-    <!-- Page Header -->
     <div style="padding: 30px 0 10px;">
         <h1 style="font-size: 1.8em; font-weight: 800; color: #fff; margin-bottom: 8px;">Market Data</h1>
-        <p style="color: #666; font-size: 0.9em;">Detailed Bitcoin and crypto market statistics, whale activity, and historical data.</p>
+        <p style="color: #666; font-size: 0.9em;">Live Bitcoin and crypto market statistics updated every page load.</p>
     </div>
 
-    <!-- BTC Detail Cards -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin: 20px 0;">
+    <!-- BTC Stats Cards -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin: 20px 0;" id="btc-cards">
         <div class="card" style="border-left: 4px solid #f7931a; margin-bottom: 0;">
             <div style="font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">BTC Price</div>
-            <div style="font-size: 1.7em; font-weight: 800; color: #f7931a;">$75,601.00</div>
-            <div class="badge badge-down" style="margin-top: 8px;">▼ 2.04% (24h)</div>
+            <div style="font-size: 1.7em; font-weight: 800; color: #f7931a;" id="btc-price">Loading...</div>
+            <div id="btc-change-badge" style="margin-top: 8px;"></div>
         </div>
         <div class="card" style="border-left: 4px solid #4caf50; margin-bottom: 0;">
             <div style="font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">24h High</div>
-            <div style="font-size: 1.7em; font-weight: 800; color: #4caf50;">$77,243.00</div>
+            <div style="font-size: 1.7em; font-weight: 800; color: #4caf50;" id="btc-high">Loading...</div>
             <div style="font-size: 0.8em; color: #555; margin-top: 8px;">Today's peak</div>
         </div>
         <div class="card" style="border-left: 4px solid #f44336; margin-bottom: 0;">
             <div style="font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">24h Low</div>
-            <div style="font-size: 1.7em; font-weight: 800; color: #f44336;">$75,404.00</div>
+            <div style="font-size: 1.7em; font-weight: 800; color: #f44336;" id="btc-low">Loading...</div>
             <div style="font-size: 0.8em; color: #555; margin-top: 8px;">Today's bottom</div>
         </div>
         <div class="card" style="border-left: 4px solid #ff9800; margin-bottom: 0;">
             <div style="font-size: 0.75em; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">All Time High</div>
-            <div style="font-size: 1.7em; font-weight: 800; color: #ff9800;">$126,080.00</div>
-            <div style="font-size: 0.8em; color: #f44336; margin-top: 8px;">-39.92% from ATH</div>
+            <div style="font-size: 1.7em; font-weight: 800; color: #ff9800;" id="btc-ath">Loading...</div>
+            <div style="font-size: 0.8em; color: #555; margin-top: 8px;" id="btc-ath-change"></div>
         </div>
     </div>
 
@@ -107,49 +106,47 @@
 
         <!-- Left -->
         <div>
-
-            <!-- Bitcoin Price Chart (7 day using ASCII style bars) -->
             <div class="section-heading">Bitcoin — Detailed Statistics</div>
             <div class="card">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
                     <div>
                         <div class="stat-row">
                             <span class="stat-label">Current Price</span>
-                            <span class="stat-value" style="color: #f7931a;">$75,601.00</span>
+                            <span class="stat-value" style="color: #f7931a;" id="stat-price">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">24h Change</span>
-                            <span class="stat-value" style="color: #f44336;">▼ 2.04% (24h)</span>
+                            <span class="stat-value" id="stat-change">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">24h High</span>
-                            <span class="stat-value" style="color: #4caf50;">$77,243.00</span>
+                            <span class="stat-value" style="color: #4caf50;" id="stat-high">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">24h Low</span>
-                            <span class="stat-value" style="color: #f44336;">$75,404.00</span>
+                            <span class="stat-value" style="color: #f44336;" id="stat-low">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">All Time High</span>
-                            <span class="stat-value" style="color: #ff9800;">$126,080.00</span>
+                            <span class="stat-value" style="color: #ff9800;" id="stat-ath">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">ATH Change</span>
-                            <span class="stat-value" style="color: #f44336;">-39.92%</span>
+                            <span class="stat-value" style="color: #f44336;" id="stat-ath-change">...</span>
                         </div>
                     </div>
                     <div style="padding-left: 30px; border-left: 1px solid #1a1a1a;">
                         <div class="stat-row">
                             <span class="stat-label">Market Cap</span>
-                            <span class="stat-value">$1.52T</span>
+                            <span class="stat-value" id="stat-mcap">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">24h Volume</span>
-                            <span class="stat-value">$44.66B</span>
+                            <span class="stat-value" id="stat-volume">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Circulating Supply</span>
-                            <span class="stat-value">20,017,787 BTC</span>
+                            <span class="stat-value" id="stat-supply">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Max Supply</span>
@@ -157,163 +154,59 @@
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">BTC Dominance</span>
-                            <span class="stat-value">57.51%</span>
+                            <span class="stat-value" id="stat-dominance">...</span>
                         </div>
                         <div class="stat-row">
                             <span class="stat-label">Total Market Cap</span>
-                            <span class="stat-value">$2.64T</span>
+                            <span class="stat-value" id="stat-total-mcap">...</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 7 Day Price Visual -->
-            <div class="section-heading">7-Day Price Range Visual</div>
-            <div class="card">
-                <p style="color: #555; font-size: 0.82em; margin-bottom: 20px;">Relative price position over the last 7 days based on Fear & Greed sentiment data</p>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 1</span>
-                        <span style="color: #f44336;">27 — Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 27%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 2</span>
-                        <span style="color: #f44336;">26 — Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 26%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 3</span>
-                        <span style="color: #f44336;">21 — Extreme Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 21%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 4</span>
-                        <span style="color: #f44336;">23 — Extreme Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 23%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 5</span>
-                        <span style="color: #f44336;">23 — Extreme Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 23%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 6</span>
-                        <span style="color: #f44336;">21 — Extreme Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 21%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.78em; color: #666; margin-bottom: 4px;">
-                        <span>Day 7</span>
-                        <span style="color: #f44336;">12 — Extreme Fear</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 4px; height: 8px; overflow: hidden;">
-                        <div style="background: #f44336; width: 12%; height: 100%; border-radius: 4px;"></div>
-                    </div>
-                </div>
-                
+            <!-- Fear & Greed -->
+            <div class="section-heading">Fear & Greed Index</div>
+            <div class="card" id="fg-card">
+                <div class="loading">Loading Fear & Greed data...</div>
             </div>
 
             <!-- Whale Transactions -->
             <div class="section-heading">🐋 Recent Whale Transactions</div>
-            
-            
-            <div class="card" style="padding: 16px 20px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <div>
-                        <div style="font-size: 1.1em; font-weight: 700; color: #f7931a;">12.81 BTC moved</div>
-                        <div style="font-size: 0.8em; color: #555; margin-top: 4px;">2026-04-19 04:25 UTC</div>
-                        <div style="font-size: 0.85em; color: #999; margin-top: 6px; line-height: 1.6;">Large Bitcoin transaction detected: 12.81 BTC (approx $858,054 USD) moving through the network.</div>
-                    </div>
-                    
-                    <a href="https://blockchain.info/tx/f6cab96f7a7993d60e7547b84f230708c8a33647fc48e05fd809ae2ac1c695bd" target="_blank" style="color: #f7931a; text-decoration: none; font-size: 0.8em; font-weight: 600; border: 1px solid #f7931a; padding: 6px 14px; border-radius: 4px; white-space: nowrap;">View TX →</a>
-                    
+            <div id="whale-section">
+                <div class="card" style="text-align: center; color: #555; padding: 30px;">
+                    Loading whale transactions...
                 </div>
             </div>
-            
-            
-
         </div>
 
         <!-- Sidebar -->
         <div>
-
-            <!-- Fear & Greed -->
-            <div class="card">
-                <div class="section-heading" style="margin-top: 0;">Fear & Greed Index</div>
-                <div style="text-align: center; margin: 10px 0 20px;">
-                    <div style="font-size: 3.5em; font-weight: 800; color: #ff9800;">27</div>
-                    <div style="font-size: 1.1em; color: #ff9800; font-weight: 600; margin-top: 4px;">Fear</div>
-                </div>
-                <div style="background: linear-gradient(to right, #f44336, #ff9800, #ffeb3b, #8bc34a, #4caf50); height: 8px; border-radius: 4px; position: relative; margin-bottom: 6px;">
-                    <div style="position: absolute; top: -4px; left: 27%; width: 16px; height: 16px; background: #fff; border-radius: 50%; transform: translateX(-50%); border: 2px solid #333;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.72em; color: #555; margin-top: 8px; margin-bottom: 16px;">
-                    <span>Extreme Fear</span><span>Neutral</span><span>Extreme Greed</span>
-                </div>
-                <div style="background: #0d0d0d; border-radius: 6px; padding: 12px 16px; font-size: 0.82em; color: #888; line-height: 1.7;">
-                    
-                    Fear is dominant. The market is cautious. Watch for buying opportunities on dips.
-                    
-                </div>
-            </div>
-
-            <!-- Global Market Stats -->
+            <!-- Global Market -->
             <div class="card">
                 <div class="section-heading" style="margin-top: 0;">🌍 Global Market</div>
                 <div class="stat-row">
                     <span class="stat-label">Total Market Cap</span>
-                    <span class="stat-value">$2.64T</span>
+                    <span class="stat-value" id="side-total-mcap">...</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">24h Volume</span>
-                    <span class="stat-value">$104.53B</span>
+                    <span class="stat-value" id="side-volume">...</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">BTC Dominance</span>
-                    <span class="stat-value" style="color: #f7931a;">57.51%</span>
+                    <span class="stat-value" style="color: #f7931a;" id="side-btc-dom">...</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">ETH Dominance</span>
-                    <span class="stat-value" style="color: #90caf9;">10.74%</span>
+                    <span class="stat-value" style="color: #90caf9;" id="side-eth-dom">...</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Active Coins</span>
-                    <span class="stat-value">17576</span>
+                    <span class="stat-value" id="side-coins">...</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Market Change 24h</span>
-                    <span class="stat-value" style="color: #f44336;">-2.19%</span>
+                    <span class="stat-value" id="side-mcap-change">...</span>
                 </div>
             </div>
 
@@ -322,24 +215,23 @@
             <!-- Quick Links -->
             <div class="card">
                 <div class="section-heading" style="margin-top: 0;">🔗 Quick Links</div>
-                <a href="https://blockchain.info" target="_blank" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
+                <a href="https://blockchain.info" target="_blank" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
                     <span style="color: #ccc; font-size: 0.88em;">Blockchain Explorer</span>
-                    <span style="color: #f7931a; font-size: 0.78em;">→</span>
+                    <span style="color: #f7931a;">→</span>
                 </a>
-                <a href="https://mempool.space" target="_blank" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
+                <a href="https://mempool.space" target="_blank" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
                     <span style="color: #ccc; font-size: 0.88em;">Mempool Explorer</span>
-                    <span style="color: #f7931a; font-size: 0.78em;">→</span>
+                    <span style="color: #f7931a;">→</span>
                 </a>
-                <a href="https://coingecko.com/en/coins/bitcoin" target="_blank" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
+                <a href="https://coingecko.com/en/coins/bitcoin" target="_blank" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; text-decoration: none;">
                     <span style="color: #ccc; font-size: 0.88em;">CoinGecko BTC Page</span>
-                    <span style="color: #f7931a; font-size: 0.78em;">→</span>
+                    <span style="color: #f7931a;">→</span>
                 </a>
-                <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none;">
+                <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" style="display: flex; justify-content: space-between; padding: 10px 0; text-decoration: none;">
                     <span style="color: #ccc; font-size: 0.88em;">Fear & Greed Index</span>
-                    <span style="color: #f7931a; font-size: 0.78em;">→</span>
+                    <span style="color: #f7931a;">→</span>
                 </a>
             </div>
-
         </div>
     </div>
 
@@ -348,29 +240,185 @@
 </div>
 
 <footer>
-    <p>© April 19, 2026 CryptoDaily. All rights reserved. Data provided for informational purposes only. Not financial advice.</p>
+    <p>© CryptoDaily. All rights reserved. Data provided for informational purposes only. Not financial advice.</p>
 </footer>
 
+<!-- Real-Time JavaScript -->
 <script>
-// Live date and time
+const fmt = (n) => n >= 1e12 ? '$' + (n/1e12).toFixed(2) + 'T' :
+                   n >= 1e9  ? '$' + (n/1e9).toFixed(2)  + 'B' :
+                   n >= 1e6  ? '$' + (n/1e6).toFixed(2)  + 'M' :
+                   '$' + n.toLocaleString();
+
+const fmtPrice = (n) => n == null ? 'N/A' :
+                        n >= 1 ? '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) :
+                        '$' + n.toFixed(6);
+
+const colorVal = (n) => n >= 0 ? '#4caf50' : '#f44336';
+
+// Top bar live date and time
 const now = new Date();
 document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
 document.getElementById('live-time').textContent = now.toUTCString().slice(17,22) + ' UTC';
 
-// Live BTC price
-fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true')
-  .then(r => r.json())
-  .then(data => {
-    const price = '$' + data.bitcoin.usd.toLocaleString('en-US');
-    const change = data.bitcoin.usd_24h_change.toFixed(2);
-    const arrow = change >= 0 ? '▲' : '▼';
-    const color = change >= 0 ? '#4caf50' : '#f44336';
-    document.getElementById('live-price').innerHTML =
-      `BTC: <strong style="color:#f7931a">${price}</strong> <span style="color:${color}">${arrow} ${Math.abs(change)}%</span>`;
-  })
-  .catch(() => {
-    document.getElementById('live-price').textContent = 'BTC: Price unavailable';
-  });
+// Fetch BTC + Global data
+async function loadMarketData() {
+    // Update time first
+    const t = new Date();
+    document.getElementById('live-date').textContent = t.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+    document.getElementById('live-time').textContent = t.toUTCString().slice(17,22) + ' UTC';
+
+    try {
+        const r1 = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&price_change_percentage=24h');
+        const d1 = await r1.json();
+        const btc = d1[0];
+
+        const price       = fmtPrice(btc.current_price);
+        const change      = btc.price_change_percentage_24h?.toFixed(2);
+        const changeColor = colorVal(change);
+        const arrowStr    = change >= 0 ? '▲' : '▼';
+
+        // Update top bar AND header from same data
+        const priceHTML = `BTC: <strong style="color:#f7931a">${price}</strong> <span style="color:${changeColor}">${arrowStr} ${Math.abs(change)}%</span>`;
+        document.getElementById('live-price').innerHTML  = priceHTML;
+        document.getElementById('header-price').textContent = price;
+        document.getElementById('header-change').innerHTML =
+            `<span style="color:${changeColor}">${arrowStr} ${Math.abs(change)}% (24h)</span>`;
+        // Header
+        document.getElementById('header-price').textContent = price;
+        document.getElementById('header-change').innerHTML =
+            `<span style="color:${changeColor}">${arrow} ${Math.abs(change)}% (24h)</span>`;
+
+        // Cards
+        document.getElementById('btc-price').textContent = price;
+        document.getElementById('btc-change-badge').innerHTML =
+            `<span style="background:${change>=0?'#0d2d0d':'#2d0d0d'}; color:${changeColor}; padding:3px 10px; border-radius:4px; font-size:0.75em; font-weight:700;">${arrow} ${Math.abs(change)}% (24h)</span>`;
+        document.getElementById('btc-high').textContent = fmtPrice(btc.high_24h);
+        document.getElementById('btc-low').textContent  = fmtPrice(btc.low_24h);
+        document.getElementById('btc-ath').textContent  = fmtPrice(btc.ath);
+        document.getElementById('btc-ath-change').textContent = btc.ath_change_percentage?.toFixed(2) + '% from ATH';
+
+        // Stats
+        document.getElementById('stat-price').textContent      = price;
+        document.getElementById('stat-change').innerHTML       = `<span style="color:${changeColor}">${arrow} ${Math.abs(change)}%</span>`;
+        document.getElementById('stat-high').textContent       = fmtPrice(btc.high_24h);
+        document.getElementById('stat-low').textContent        = fmtPrice(btc.low_24h);
+        document.getElementById('stat-ath').textContent        = fmtPrice(btc.ath);
+        document.getElementById('stat-ath-change').textContent = btc.ath_change_percentage?.toFixed(2) + '%';
+        document.getElementById('stat-mcap').textContent       = fmt(btc.market_cap);
+        document.getElementById('stat-volume').textContent     = fmt(btc.total_volume);
+        document.getElementById('stat-supply').textContent     = btc.circulating_supply?.toLocaleString('en-US', {maximumFractionDigits:0}) + ' BTC';
+
+    } catch(e) {
+        console.error('BTC fetch error:', e);
+    }
+
+    // Global market
+    try {
+        const r2 = await fetch('https://api.coingecko.com/api/v3/global');
+        const d2 = await r2.json();
+        const g  = d2.data;
+
+        const totalMcap   = fmt(g.total_market_cap.usd);
+        const totalVol    = fmt(g.total_volume.usd);
+        const btcDom      = g.market_cap_percentage.btc?.toFixed(2) + '%';
+        const ethDom      = g.market_cap_percentage.eth?.toFixed(2) + '%';
+        const activeCoins = g.active_cryptocurrencies?.toLocaleString();
+        const mcapChange  = g.market_cap_change_percentage_24h_usd?.toFixed(2);
+
+        document.getElementById('stat-dominance').textContent  = btcDom;
+        document.getElementById('stat-total-mcap').textContent = totalMcap;
+        document.getElementById('side-total-mcap').textContent = totalMcap;
+        document.getElementById('side-volume').textContent     = totalVol;
+        document.getElementById('side-btc-dom').textContent    = btcDom;
+        document.getElementById('side-eth-dom').textContent    = ethDom;
+        document.getElementById('side-coins').textContent      = activeCoins;
+        document.getElementById('side-mcap-change').innerHTML  =
+            `<span style="color:${colorVal(mcapChange)}">${mcapChange}%</span>`;
+
+    } catch(e) {
+        console.error('Global fetch error:', e);
+    }
+
+    // Fear & Greed
+    try {
+        const r3  = await fetch('https://api.alternative.me/fng/?limit=7');
+        const d3  = await r3.json();
+        const fg  = d3.data[0];
+        const val = parseInt(fg.value);
+        const lbl = fg.value_classification;
+        const fgColor = val <= 25 ? '#f44336' : val <= 45 ? '#ff9800' :
+                        val <= 55 ? '#ffeb3b' : val <= 75 ? '#8bc34a' : '#4caf50';
+
+        const history = d3.data.map((h, i) => `
+            <div style="margin-bottom:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.78em; color:#666; margin-bottom:4px;">
+                    <span>Day ${i+1}</span>
+                    <span style="color:${parseInt(h.value)>=60?'#4caf50':parseInt(h.value)<=40?'#f44336':'#f7931a'}">${h.value} — ${h.value_classification}</span>
+                </div>
+                <div style="background:#1a1a1a; border-radius:4px; height:8px; overflow:hidden;">
+                    <div style="background:${parseInt(h.value)>=60?'#4caf50':parseInt(h.value)<=40?'#f44336':'#f7931a'}; width:${h.value}%; height:100%; border-radius:4px;"></div>
+                </div>
+            </div>`).join('');
+
+        document.getElementById('fg-card').innerHTML = `
+            <div style="text-align:center; margin:10px 0 20px;">
+                <div style="font-size:3.5em; font-weight:800; color:${fgColor};">${val}</div>
+                <div style="font-size:1.1em; color:${fgColor}; font-weight:600; margin-top:4px;">${lbl}</div>
+            </div>
+            <div style="background:linear-gradient(to right,#f44336,#ff9800,#ffeb3b,#8bc34a,#4caf50); height:8px; border-radius:4px; position:relative; margin-bottom:6px;">
+                <div style="position:absolute; top:-4px; left:${val}%; width:16px; height:16px; background:#fff; border-radius:50%; transform:translateX(-50%); border:2px solid #333;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.72em; color:#555; margin-bottom:20px;">
+                <span>Extreme Fear</span><span>Neutral</span><span>Extreme Greed</span>
+            </div>
+            <div class="section-heading" style="margin-top:0;">7-Day History</div>
+            ${history}`;
+
+    } catch(e) {
+        document.getElementById('fg-card').innerHTML = '<div class="loading">Fear & Greed data unavailable</div>';
+    }
+
+    // Whale Transactions
+    try {
+        const r4 = await fetch('https://blockchain.info/unconfirmed-transactions?format=json&limit=50');
+        const d4 = await r4.json();
+
+        const whales = d4.txs
+            .map(tx => ({ btc: tx.out.reduce((s,o) => s + (o.value||0), 0) / 1e8, hash: tx.hash, time: tx.time }))
+            .filter(tx => tx.btc >= 10)
+            .sort((a,b) => b.btc - a.btc)
+            .slice(0, 8);
+
+        if (whales.length === 0) {
+            document.getElementById('whale-section').innerHTML =
+                '<div class="card" style="text-align:center; color:#555; padding:30px;">No large transactions detected right now. Check back later.</div>';
+        } else {
+            document.getElementById('whale-section').innerHTML = whales.map(w => `
+                <div class="card" style="padding:16px 20px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                        <div>
+                            <div style="font-size:1.1em; font-weight:700; color:#f7931a;">${w.btc.toLocaleString('en-US', {maximumFractionDigits:2})} BTC moved</div>
+                            <div style="font-size:0.8em; color:#555; margin-top:4px;">${new Date(w.time*1000).toUTCString()}</div>
+                        </div>
+                        <a href="https://blockchain.info/tx/${w.hash}" target="_blank"
+                           style="color:#f7931a; text-decoration:none; font-size:0.8em; font-weight:600; border:1px solid #f7931a; padding:6px 14px; border-radius:4px;">
+                           View TX →
+                        </a>
+                    </div>
+                </div>`).join('');
+        }
+    } catch(e) {
+        document.getElementById('whale-section').innerHTML =
+            '<div class="card" style="text-align:center; color:#555; padding:30px;">Whale data temporarily unavailable.</div>';
+    }
+}
+
+// Load immediately
+loadMarketData();
+
+// Then refresh every 60 seconds automatically
+setInterval(loadMarketData, 60000);
 </script>
 
 </body>

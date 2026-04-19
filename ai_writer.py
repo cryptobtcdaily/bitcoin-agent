@@ -1,3 +1,5 @@
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 import ollama
 from datetime import datetime
 
@@ -28,7 +30,7 @@ KEY_TAKEAWAY:
 """
 
     response = ollama.chat(
-        model="mistral",
+        model="tinyllama",
         messages=[{"role": "user", "content": prompt}]
     )
     return response["message"]["content"].strip()
@@ -58,7 +60,7 @@ stories to watch out for tomorrow. Be specific.)
 """
 
     response = ollama.chat(
-        model="mistral",
+        model="tinyllama",
         messages=[{"role": "user", "content": prompt}]
     )
     return response["message"]["content"].strip()
@@ -85,7 +87,7 @@ Write a welcoming intro paragraph (4-5 sentences) that:
 """
 
     response = ollama.chat(
-        model="mistral",
+        model="tinyllama",
         messages=[{"role": "user", "content": prompt}]
     )
     return response["message"]["content"].strip()

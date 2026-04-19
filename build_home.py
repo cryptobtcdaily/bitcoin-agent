@@ -1,4 +1,6 @@
-import json
+
+import sys
+sys.stdout.reconfigure(encoding='utf-8')import json
 from jinja2 import Environment, FileSystemLoader
 from fetch_news import fetch_news, fetch_price
 from fetch_market import (fetch_top_50, fetch_fear_greed, fetch_trending,
